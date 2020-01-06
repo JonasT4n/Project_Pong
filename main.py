@@ -1,5 +1,64 @@
-from GameAttribute import *
+import pygame as pg
+import os, random, sys
+path = os.getcwd()
+sys.path.append("{}\\venv".format(path))
+from Paddle import Paddle
+from windowScreen import Screen
+from Ball import Ball
+from Button import Button, CustomButton
 
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+GREY = (150, 150, 150)
+YELLOW = (255, 255, 0)
+GREEN = (0, 255, 0)
+LIGHTBLUE = (0, 255, 255)
+
+# Grouping Objects
+listSpriteGame = pg.sprite.Group()
+listSpriteMenu = pg.sprite.Group()
+
+# Windows Attribute
+win_size = [720, 480]
+icon = "images\\Logo.jpg"
+clock = pg.time.Clock()
+screen = Screen(win_size, "PONG!")
+screen.setIcon(icon)
+middle_placement = [(win_size[0] // 2), win_size[1] // 2]
+fontStyle = "\\".join(list(os.getcwd().split("\\"))) + "\\Font\\comic.ttf"
+direction = {"Menu": True, "Quit": False, "Play": False, "Option": False, "GameOver": False}
+on_mouse_button = {
+    "Play": False,
+    "Quit": False,
+    "Resume": False,
+    "Option": False,
+    "2P": False,
+    "4P": False,
+    "Confirm": False,
+    "QuitGame": False,
+    "PlayAgain": False,
+    "Back": False
+}
+mode = {"2Player": True, "4Player": False, "2PBot": False}
+btn_image1 = "images\\WoodenSign1.png"
+btn_image2 = "images\\WoodenSignPressed1.png"
+timePlay, defaultTimePlay = 60.0, 60.0
+fps = 60
+ball_speed = [8, 8]
+def display_time(scr, duration, font_style):
+    total_min = duration // 60
+    total_sec = duration - (total_min * 60)
+    t = pg.font.Font(font_style, 30).render("{}:{}".format(int(total_min), int(total_sec)), True, BLACK)
+    scr.blit(t, [middle_placement[0] - 15, 15])
+def printText(scr, txt: str, size: int, style=None, position=None, **kwargs):
+    if position is None:
+        position = [0, 0]
+    scr.blit(pg.font.Font(style, size).render("<Press ESC to Pause>", False, kwargs["color"]), position)
+
+# initialize Pygame
 pg.init()
 
 # 2 Player Game Play
@@ -441,4 +500,3 @@ if __name__ == '__main__':
         if direction["Quit"] is True:
             is_running = False
     pg.quit()
-    sys.exit()
